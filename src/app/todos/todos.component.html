@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Available Lists</h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+      <li *ngFor="let l of usersLists | async" (click)="setActiveList(l.$key)">{{ (l.name | async)?.$value }}</li>
+    </ul>
+    <div>
+      New List: <input class='form-input' #id type="text" name="" value="">
+      <button (click)="newList(id.value)">save</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default" *ngIf="selectedListItems">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ (selectedList | async)?.name }} Items</h3>
+  </div>
+  <div class="panel-body">
+    <div *ngFor="let i of selectedListItems | async"  (click)="toggleCompletion(i.$key, !i.complete)">
+      <input type=checkbox [checked]="i.complete">
+      {{ i.name }}
+    </div>
+    Add to list:
+    <input #newListItem type="text">
+    <button (click)="addToList(newListItem.value)">save</button>
+  </div>
+</div>

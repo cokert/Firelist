@@ -1,0 +1,3 @@
+<img *ngIf="_auth.userData" [src]="_auth.userData.userPicture" />
+<button *ngIf="!_auth.userData"(click)="login()">login</button>
+<button *ngIf="_auth.userData"(click)="logout()">logout</button>
