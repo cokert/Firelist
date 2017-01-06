@@ -12,8 +12,6 @@ export class TodosListComponent implements OnInit {
   constructor(private _todoLists : TodosListsService) { }
 
   ngOnInit() {
-      //this._todoLists.getUsersLists().subscribe(x => console.log("sub output", x));
-      this._todoLists.activeListChanged$.subscribe(x => console.log("list changed sub output", x));
   }
 
 }

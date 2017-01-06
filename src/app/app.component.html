@@ -1,10 +1,13 @@
 
 <app-nav></app-nav>
-<div class="row">
+<div class="row" *ngIf="(_auth.authChanged$ | async)?.userId">
   <div class="col-md-3">
     <app-todos-list></app-todos-list>
   </div>
   <div class="col-md-9">
     <app-todos></app-todos>
   </div>
+</div>
+<div class="row" *ngIf="!((_auth.authChanged$ | async)?.userId)">
+  <div class="jumbotron">Not logged in</div>
 </div>

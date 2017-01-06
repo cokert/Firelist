@@ -1,25 +1,27 @@
 import { Injectable,
          EventEmitter } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { AngularFire,
          AuthProviders,
          AuthMethods,
          FirebaseListObservable,
          FirebaseObjectObservable } from 'angularfire2';
 import { Observable} from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/rx';
 import { Subject } from 'rxjs/Subject';
 
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 
+import { AuthService } from '../../auth/auth.service';
 import { TodosPathBuilderService } from '../todos-pathbuilder.service';
 import { TodosItemsService } from '../todos-items.service';
 
 @Injectable()
 export class TodosListsService {
 
+  private _listsSubscription;
+  private _activeListSubscription;
   private _usersLists: BehaviorSubject<any> = new BehaviorSubject<any>("");
   private _listChanged: BehaviorSubject<any> = new BehaviorSubject<any>("");
 
@@ -30,11 +32,12 @@ export class TodosListsService {
               private _af: AngularFire,
               private _pb: TodosPathBuilderService,
               private _todoItems: TodosItemsService) {
-    _auth.AuthChanged.subscribe(x => {
+    _auth.authChanged$.subscribe(x => {
       //if user is logged in
-      if (x) {
+      if (x.userId) {
+        console.log('logged in: ', x);
         let userListPath = this._pb.buildUserListsPath(x.userId);
-        let lists = this._af.database.list(userListPath)
+        this._listsSubscription = this._af.database.list(userListPath)
           //names are stored under /lists/<id>/name, not under the users branch
           .map(lists => {
             lists.map(list => {
@@ -42,20 +45,27 @@ export class TodosListsService {
               list.name = this._af.database.object(path);
             })
             return lists;
-          }).subscribe(x => this._usersLists.next(x));
-        //console.log(lists);
-        //this._usersLists.next(lists);
+          }).subscribe(x => this._usersLists.next(x));            
+      }
+      else {
+        console.log('not logged in');
+        if (this._listsSubscription) this._listsSubscription.unsubscribe();
+        if (this._activeListSubscription) this._activeListSubscription.unsubscribe();
+        this._usersLists.next([]);
+        this._listChanged.next([]);
+        this._todoItems.setNoActiveList();
       }
     })
   }
 
   setActiveList(listKey) {
-    this._af.database.object(this._pb.buildListPath(listKey)).subscribe(x => {
-      var f = {
-        name: x.name,
-        key: x.$key
-      };
-      this._listChanged.next(f);
+    this._activeListSubscription = this._af.database.object(this._pb.buildListPath(listKey))
+      .subscribe(x => {
+        var f = {
+          name: x.name,
+          key: x.$key
+        };
+        this._listChanged.next(f);
     });
     this._todoItems.setActiveListKey(listKey);
   }

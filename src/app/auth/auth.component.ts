@@ -15,15 +15,13 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
-  auth = null;
+
+  private _userData = null;
 
   constructor(private _auth: AuthService) { }
 
   ngOnInit() {
-    this._auth.AuthChanged.subscribe(x => this.auth = x);
+    this._auth.authChanged$.subscribe(x => this._userData = x);
   }
-
-  login() { this._auth.login(); }
-  logout() { this._auth.logout(); }
 
 }

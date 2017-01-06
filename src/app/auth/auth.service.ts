@@ -5,11 +5,14 @@ import { AngularFire,
          AuthMethods,
          FirebaseListObservable,
          FirebaseObjectObservable } from 'angularfire2';
+import { BehaviorSubject } from 'rxjs/rx';
 
 @Injectable()
 export class AuthService {
   userData = null;
-  AuthChanged: EventEmitter<any> = new EventEmitter();
+
+  private _authChanged: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  authChanged$ = this._authChanged.asObservable();
 
   constructor(private _af: AngularFire) {
     this._af.auth.subscribe(x => {
@@ -19,9 +22,12 @@ export class AuthService {
           userPicture: x.google.photoURL
         };
       } else {
-        this.userData = null;
+        this.userData = {
+          userId: null,
+          userPicture: null
+        };
       };
-      this.AuthChanged.emit(this.userData);
+      this._authChanged.next(this.userData);
     });
  }
 
