@@ -1,29 +1,23 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Available Lists</h3>
-  </div>
-  <div class="panel-body">
-    <ul>
-      <li *ngFor="let l of usersLists | async" (click)="setActiveList(l.$key)">{{ (l.name | async)?.$value }}</li>
-    </ul>
-    <div>
-      New List: <input class='form-input' #id type="text" name="" value="">
-      <button (click)="newList(id.value)">save</button>
-    </div>
-  </div>
+
+<div class="jumbotron" *ngIf="!_listName">
+  Select an available list or create a new one
 </div>
 
-<div class="panel panel-default" *ngIf="selectedListItems">
+
+<div class="panel panel-default" *ngIf="_listName">
   <div class="panel-heading">
-    <h3 class="panel-title">{{ (selectedList | async)?.name }} Items</h3>
+    <h3 class="panel-title">{{ _listName }} Items</h3>
   </div>
   <div class="panel-body">
-    <div *ngFor="let i of selectedListItems | async"  (click)="toggleCompletion(i.$key, !i.complete)">
+    <div class="jumbotron" *ngIf="(_todos.listItemsChanged$ | async)?.length == 0">
+      This list is empty.  Add items using the field below.
+    </div>
+    <div *ngFor="let i of _todos.listItemsChanged$ | async"  (click)="_todos.toggleCompletionState(_listKey, i.$key, !i.complete)">
       <input type=checkbox [checked]="i.complete">
       {{ i.name }}
     </div>
     Add to list:
-    <input #newListItem type="text">
-    <button (click)="addToList(newListItem.value)">save</button>
+    <input #newListItem type="text" class="form-control">
+    <button class="btn btn-default" (click)="_todos.addToList(_listKey, newListItem.value)">save</button>
   </div>
 </div>

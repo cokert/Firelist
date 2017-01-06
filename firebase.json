@@ -1,5 +1,5 @@
 {
   "hosting": {
-    "dist": "public"
+    "public": "dist"
   }
 }
