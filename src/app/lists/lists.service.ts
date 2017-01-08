@@ -13,12 +13,12 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 
-import { AuthService } from '../../auth/auth.service';
-import { TodosPathBuilderService } from '../todos-pathbuilder.service';
-import { TodosItemsService } from '../todos-items.service';
+import { AuthService } from '../auth/auth.service';
+import { PathBuilderService } from './pathbuilder.service';
+import { ItemsService } from './items/items.service';
 
 @Injectable()
-export class TodosListsService {
+export class ListsService {
 
   private _listsSubscription;
   private _activeListSubscription;
@@ -30,8 +30,8 @@ export class TodosListsService {
 
   constructor(private _auth: AuthService,
               private _af: AngularFire,
-              private _pb: TodosPathBuilderService,
-              private _todoItems: TodosItemsService) {
+              private _pb: PathBuilderService,
+              private _items: ItemsService) {
     _auth.authChanged$.subscribe(x => {
       //if user is logged in
       if (x.userId) {
@@ -45,7 +45,7 @@ export class TodosListsService {
               list.name = this._af.database.object(path);
             })
             return lists;
-          }).subscribe(x => this._usersLists.next(x));            
+          }).subscribe(x => this._usersLists.next(x));
       }
       else {
         console.log('not logged in');
@@ -53,7 +53,7 @@ export class TodosListsService {
         if (this._activeListSubscription) this._activeListSubscription.unsubscribe();
         this._usersLists.next([]);
         this._listChanged.next([]);
-        this._todoItems.setNoActiveList();
+        this._items.setNoActiveList();
       }
     })
   }
@@ -67,7 +67,7 @@ export class TodosListsService {
         };
         this._listChanged.next(f);
     });
-    this._todoItems.setActiveListKey(listKey);
+    this._items.setActiveListKey(listKey);
   }
 
   newList(name) {

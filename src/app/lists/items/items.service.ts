@@ -13,10 +13,10 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 
-import { TodosPathBuilderService } from './todos-pathbuilder.service';
+import { PathBuilderService } from '../pathbuilder.service';
 
 @Injectable()
-export class TodosItemsService {
+export class ItemsService {
 
   private _listItems: BehaviorSubject<any> = new BehaviorSubject<any>("");
   private _activeListSubscription;
@@ -27,7 +27,7 @@ export class TodosItemsService {
   activeListKey = null;
 
   constructor(private _af: AngularFire,
-              private _pb: TodosPathBuilderService) {
+              private _pb: PathBuilderService) {
   }
 
   setNoActiveList() {

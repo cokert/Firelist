@@ -2,10 +2,10 @@
 <app-nav></app-nav>
 <div class="row" *ngIf="(_auth.authChanged$ | async)?.userId">
   <div class="col-md-3">
-    <app-todos-list></app-todos-list>
+    <app-lists></app-lists>
   </div>
   <div class="col-md-9">
-    <app-todos></app-todos>
+    <app-items></app-items>
   </div>
 </div>
 <div class="row" *ngIf="!((_auth.authChanged$ | async)?.userId)">
