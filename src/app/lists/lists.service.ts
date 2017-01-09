@@ -77,6 +77,7 @@ export class ListsService {
       .then(x => {
         console.log("listPath", this._pb.buildListPath(x.key));
         this._af.database.object(this._pb.buildListPath(x.key)).set({ name: name });
+        this.setActiveList(x.key);
       });
   }
 }
