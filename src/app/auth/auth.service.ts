@@ -17,11 +17,13 @@ export class AuthService {
   constructor(private _af: AngularFire) {
     this._af.auth.subscribe(x => {
       if (x) {
+        console.log("logged in", x);
         this.userData = {
           userId: x.uid,
           userPicture: x.google.photoURL
         };
       } else {
+        console.log("not logged in", x);
         this.userData = {
           userId: null,
           userPicture: null

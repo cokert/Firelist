@@ -23,12 +23,15 @@
             <div class="jumbotron" *ngIf="(_lists.usersListsChanged$ | async)?.length === 0">
               You have no lists yet.  Create one using the field below.
             </div>
-            <ul>
+            <ul class='list-group'>
               <li *ngFor="let l of _lists.usersListsChanged$ | async"
                   [class.active]="l.$key === selectedListKey"
-                  data-toggle="collapse"
-                  data-target="#lists">
-                <a href="#" (click)="_lists.setActiveList(l.$key)">
+                  [attr.data-toggle]="_hideListOnSelecting ? 'collapse' : ''"
+                  data-target="#lists"
+                  class='list-group-item'
+                  (click)="_lists.setActiveList(l.$key)"
+                  role="button">
+                <a href="#">
                   {{ (l.name | async)?.$value }}
                 </a>
               </li>

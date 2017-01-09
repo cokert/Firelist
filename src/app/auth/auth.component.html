@@ -1,3 +1,13 @@
-<img class="profileImage" *ngIf="_userData.userId" [src]="_userData.userPicture" />
-<button class="btn btn-default" *ngIf="!_userData.userId"(click)="_auth.login()">login</button>
-<button class="btn btn-default" *ngIf="_userData.userId"(click)="_auth.logout()">logout</button>
+<ul class="nav navbar-nav">
+  <li *ngIf="!_userData.userId">
+    <a href="#" (click)="_auth.login()">
+      Login
+    </a>
+  </li>
+  <li *ngIf="_userData.userId" (click)="_auth.logout()">
+    <!-- <img class="profileImage navbar-right" *ngIf="_userData.userId" [src]="_userData.userPicture" /> -->
+    <a href="#" >
+      Logout
+    </a>
+  </li>
+</ul>
