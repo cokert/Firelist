@@ -1,0 +1,9 @@
+
+<div class="row" *ngIf="!((_auth.authChanged$ | async)?.userId)">
+  <div class="jumbotron">
+    <h2>FireList</h2>
+    <h4>A firebase backed todo list.</h4>
+  </div>
+  <h4>You need to login to use this site</h4>
+  <p><button class="btn btn-default" (click)='_auth.login()'>Log in using Google</button>
+</div>

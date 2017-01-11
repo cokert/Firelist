@@ -9,7 +9,4 @@
       <app-items></app-items>
     </div>
   </div>
-  <div class="row" *ngIf="!((_auth.authChanged$ | async)?.userId)">
-    <div class="jumbotron">Not logged in</div>
-  </div>
-</div>
+<router-outlet></router-outlet>

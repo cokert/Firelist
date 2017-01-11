@@ -36,13 +36,7 @@
                 </a>
               </li>
             </ul>
-            <div>
-              New List: <input class='form-control' #id type="text" name="" value="">
-              <button class='btn btn-default'
-                      (click)="_lists.newList(id.value);id.value='';"
-                      data-toggle="collapse"
-                      data-target="#lists">save</button>
-            </div>
+            <app-list-new></app-list-new>
           </div>
         </div>
       </div>
