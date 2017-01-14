@@ -13,7 +13,7 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 
-import { PathBuilderService } from '../pathbuilder.service';
+import { PathBuilderService } from '../../shared/pathbuilder.service';
 
 @Injectable()
 export class ItemsService {
@@ -31,9 +31,9 @@ export class ItemsService {
   }
 
   setNoActiveList() {
-    console.log('setting no active');
+    //console.log('setting no active');
     if (this._activeListSubscription) {
-      console.log('unsubbed');
+      //console.log('unsubbed');
       this._activeListSubscription.unsubscribe();
     }
   }
@@ -41,14 +41,14 @@ export class ItemsService {
   setActiveListKey(listKey) {
     if (this._activeListSubscription) this._activeListSubscription.unsubscribe();
     this._activeListSubscription = this._af.database.list(this._pb.buildListItemsPath(listKey)).subscribe(x => {
-      console.log("activeListSub, pushing ", x);
+      //console.log("activeListSub, pushing ", x);
       this._listItems.next(x)
     });
   }
 
   addToList(key, value) {
     let path = this._pb.buildListItemsPath(key);
-    console.log('service.addToList', key, value, path);
+    //console.log('service.addToList', key, value, path);
     this._af.database.list(path).push({
       name: value,
       complete: false
@@ -57,7 +57,7 @@ export class ItemsService {
 
   toggleCompletionState(listKey, itemKey, completionState) {
     let path = this._pb.buildItemPath(listKey, itemKey);
-    console.log('toggleCompletionState', path);
+    //console.log('toggleCompletionState', path);
     this._af.database.object(path).update({ complete: completionState});
   }
 

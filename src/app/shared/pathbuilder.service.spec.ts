@@ -3,7 +3,7 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { PathBuilderService } from './pathbuilder.service';
 
-describe('PathbuilderService', () => {
+describe('PathBuilderService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [PathBuilderService]

@@ -4,26 +4,25 @@
   <app-list-new></app-list-new>
 </div>
 
-
 <div class="panel panel-default" *ngIf="_listName">
   <div class="panel-heading">
     <h3 class="panel-title">{{ _listName }} Items</h3>
   </div>
   <div class="panel-body">
-    <div class="jumbotron" *ngIf="(_todos.listItemsChanged$ | async)?.length == 0">
+    <div class="jumbotron" *ngIf="(_items.listItemsChanged$ | async)?.length == 0">
       This list is empty.  Add items using the field below.
     </div>
     <ul class="list-group">
       <li class='list-group-item'
           role="button"
-          *ngFor="let i of _todos.listItemsChanged$ | async"
-          (click)="_todos.toggleCompletionState(_listKey, i.$key, !i.complete)">
+          *ngFor="let i of _items.listItemsChanged$ | async"
+          (click)="_items.toggleCompletionState(_listKey, i.$key, !i.complete)">
         <input class="" type="checkbox" [checked]="i.complete">
         {{ i.name }}
       </li>
     </ul>
     Add to list:
     <input #newListItem type="text" class="form-control">
-    <button class="btn btn-default" (click)="_todos.addToList(_listKey, newListItem.value);newListItem.value='';">save</button>
+    <button class="btn btn-default" (click)="_items.addToList(_listKey, newListItem.value);newListItem.value='';">save</button>
   </div>
 </div>

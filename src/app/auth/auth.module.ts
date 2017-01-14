@@ -8,9 +8,7 @@ import { AuthComponent } from './auth.component';
   imports: [
     CommonModule
   ],
-  providers: [
-    AuthService
-  ],
+  providers: [ ],
   declarations: [
     AuthComponent
   ],

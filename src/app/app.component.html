@@ -1,12 +1,5 @@
 
 <app-nav></app-nav>
 <div class='container'>
-  <div class="row" *ngIf="(_auth.authChanged$ | async)?.userId">
-    <div class="col-sm-3">
-      <app-lists></app-lists>
-    </div>
-    <div class="col-sm-9">
-      <app-items></app-items>
-    </div>
-  </div>
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+</div>

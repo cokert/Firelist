@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ItemsService } from './items.service';
-import { ListsService } from '../lists.service';
+import { ListsService } from '../lists/lists.service';
 
 @Component({
   selector: 'app-items',
@@ -12,12 +12,12 @@ export class ItemsComponent implements OnInit {
   private _listKey = null;
   private _listName = null;
 
-  constructor(private _todos: ItemsService,
-              private _todoLists: ListsService ) {
+  constructor(private _items: ItemsService,
+              private _lists: ListsService ) {
   }
 
   ngOnInit() {
-    this._todoLists.activeListChanged$.subscribe(x => {
+    this._lists.activeListChanged$.subscribe(x => {
       if (x != '') {
         this._listKey = x.key;
         this._listName = x.name;

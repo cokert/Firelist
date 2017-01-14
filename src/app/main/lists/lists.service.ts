@@ -13,9 +13,9 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 
-import { AuthService } from '../auth/auth.service';
-import { PathBuilderService } from './pathbuilder.service';
-import { ItemsService } from './items/items.service';
+import { AuthService } from '../../auth/auth.service';
+import { PathBuilderService } from '../../shared/pathbuilder.service';
+import { ItemsService } from '../items/items.service';
 
 @Injectable()
 export class ListsService {
@@ -28,6 +28,8 @@ export class ListsService {
   usersListsChanged$ = this._usersLists.asObservable();
   activeListChanged$ = this._listChanged.asObservable();
 
+  activeListKey = null;
+
   constructor(private _auth: AuthService,
               private _af: AngularFire,
               private _pb: PathBuilderService,
@@ -35,7 +37,7 @@ export class ListsService {
     _auth.authChanged$.subscribe(x => {
       //if user is logged in
       if (x.userId) {
-        console.log('logged in: ', x);
+        //console.log('logged in: ', x);
         let userListPath = this._pb.buildUserListsPath(x.userId);
         this._listsSubscription = this._af.database.list(userListPath)
           //names are stored under /lists/<id>/name, not under the users branch
@@ -48,7 +50,7 @@ export class ListsService {
           }).subscribe(x => this._usersLists.next(x));
       }
       else {
-        console.log('not logged in');
+        //console.log('not logged in');
         if (this._listsSubscription) this._listsSubscription.unsubscribe();
         if (this._activeListSubscription) this._activeListSubscription.unsubscribe();
         this._usersLists.next([]);
@@ -58,13 +60,14 @@ export class ListsService {
     })
   }
 
-  setActiveList(listKey) {
+  selectList(listKey) {
     this._activeListSubscription = this._af.database.object(this._pb.buildListPath(listKey))
       .subscribe(x => {
         var f = {
           name: x.name,
           key: x.$key
         };
+        this.activeListKey = listKey;
         this._listChanged.next(f);
     });
     this._items.setActiveListKey(listKey);
@@ -72,12 +75,16 @@ export class ListsService {
 
   newList(name) {
     let userListPath = this._pb.buildUserListsPath(this._auth.userData.userId);
-    console.log("userListPath", userListPath);
+    //console.log("userListPath", userListPath);
     this._af.database.list(userListPath).push('true')
       .then(x => {
-        console.log("listPath", this._pb.buildListPath(x.key));
-        this._af.database.object(this._pb.buildListPath(x.key)).set({ name: name });
-        this.setActiveList(x.key);
+        //console.log("listPath", this._pb.buildListPath(x.key));
+        this._af.database.object(this._pb.buildListPath(x.key)).set({
+            name: name,
+            creator: this._auth.userData.userId,
+            dateCreated: Date()
+          });
+        this.selectList(x.key);
       });
   }
 }

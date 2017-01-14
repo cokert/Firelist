@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Available Lists</h3>
+  </div>
+  <div id="available-lists" class="panel-body">
+    <div class="jumbotron" *ngIf="(_lists.usersListsChanged$ | async)?.length === 0">
+      You have no lists yet.  Create one using the field below.
+    </div>
+    <ul class='list-group'>
+      <li *ngFor="let l of _lists.usersListsChanged$ | async"
+          [class.active]="l.$key === _lists.activeListKey"
+          [attr.data-toggle]="_sizeService.screenIsPhoneSized && _lists.activeListKey ? 'collapse' : ''"
+          data-target="#lists"
+          class='list-group-item'
+          (click)="routeToList(l.$key)"
+          role="button">
+        <a>
+          {{ (l.name | async)?.$value }}
+        </a>
+      </li>
+    </ul>
+    <app-list-new></app-list-new>
+  </div>
+</div>
