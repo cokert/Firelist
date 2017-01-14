@@ -6,7 +6,7 @@ export class PathBuilderService {
   constructor() { }
 
   buildUserListsPath(userId) {
-    return '/users/' + userId + '/lists';
+    return this.buildUserPath(userId) + '/lists';
   }
 
   buildListPath(listKey) {
@@ -19,6 +19,10 @@ export class PathBuilderService {
 
   buildItemPath(listKey, itemKey) {
     return this.buildListItemsPath(listKey) + '/' + itemKey;
+  }
+
+  buildUserPath(userId) {
+    return '/users/' + userId;
   }
 
 }
