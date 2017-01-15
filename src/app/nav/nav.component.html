@@ -12,7 +12,10 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" data-toggle="collapse" data-target=".navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse"
+         [attr.data-toggle]="_sizeService.screenIsPhoneSized ? 'collapse' : ''"
+         data-target=".navbar-collapse"
+         id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li routerLinkActive='active'><a routerLink='home'>Home</a></li>
         <li routerLinkActive='active' [class.disabled]="_auth.userData.userId == null"><a routerLink='/lists'>Lists</a></li>

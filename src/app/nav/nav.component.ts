@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth/auth.service';
+import { ScreenSizeService }  from '../shared/screen-size.service';
 
 @Component({
   selector: 'app-nav',
@@ -9,7 +10,8 @@ import { AuthService } from '../auth/auth.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private _auth: AuthService) { }
+  constructor(private _auth: AuthService,
+              private _screenSize: ScreenSizeService ) { }
 
   ngOnInit() {
   }
