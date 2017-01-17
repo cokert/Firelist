@@ -14,15 +14,29 @@
     </div>
     <ul class="list-group">
       <li class='list-group-item'
-          role="button"
-          *ngFor="let i of _items.listItemsChanged$ | async"
-          (click)="_items.toggleCompletionState(_listKey, i.$key, !i.complete)">
-        <input class="" type="checkbox" [checked]="i.complete">
-        {{ i.name }}
+          *ngFor="let i of _items.listItemsChanged$ | async">
+        <div class="row">
+          <div class='col-xs-11'
+              role="button"
+              (click)="_items.toggleCompletionState(_listKey, i.$key, !i.complete)">
+            <input class="" type="checkbox" [checked]="i.complete">
+            {{ i.name }}
+          </div>
+          <div class='gearMenu col-xs-1'>
+            <!-- <app-item-menu [itemKey]="i.$key" [listKey]="_listKey" class="pull-right"></app-item-menu> -->
+            <app-gear-menu [menuData]="getMenuObject(_listKey, i.$key)"></app-gear-menu>
+          </div>
+        </div>
       </li>
     </ul>
     Add to list:
     <input #newListItem type="text" class="form-control">
     <button class="btn btn-default" (click)="_items.addToList(_listKey, newListItem.value);newListItem.value='';">save</button>
   </div>
+
+  <ul>
+    <li *ngFor="let a of _items.listArchiveChanged$ | async">
+      <a (click)="_items.restore(a.$key)" >{{ a.name }}</a>
+    </li>
+  </ul>
 </div>

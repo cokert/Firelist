@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div *ngIf="showChrome" class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Available Lists</h3>
   </div>
@@ -11,14 +11,27 @@
           [class.active]="l.$key === _lists.activeListKey"
           [attr.data-toggle]="_sizeService.screenIsPhoneSized && _lists.activeListKey ? 'collapse' : ''"
           data-target="#lists"
-          class='list-group-item'
-          (click)="routeToList(l.$key)"
-          role="button">
-        <a>
-          {{ (l.name | async)?.$value }}
-        </a>
+          class='list-group-item'>
+          <div class="row">
+            <div class="col-xs-11" (click)="routeToList(l.$key)" role="button">
+              <a>
+                {{ (l.name | async)?.$value }}
+              </a>
+            </div>
+            <div class="col-xs-1 gearMenu">
+              <app-gear-menu [menuData]="getMenuData(l.$key)"></app-gear-menu>
+            </div>
+          </div>
       </li>
     </ul>
     <app-list-new></app-list-new>
   </div>
 </div>
+
+<ng-container *ngIf="!showChrome">
+  <li role="button" *ngFor="let l of _lists.usersListsChanged$ | async" (click)="routeToList(l.$key)">
+    <a class="hand">
+      {{ (l.name | async)?.$value }}
+    </a>
+  </li>
+</ng-container>

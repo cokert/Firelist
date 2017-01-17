@@ -11,7 +11,7 @@ import { ScreenSizeService }  from '../shared/screen-size.service';
 export class NavComponent implements OnInit {
 
   constructor(private _auth: AuthService,
-              private _screenSize: ScreenSizeService ) { }
+              private _sizeService: ScreenSizeService ) { }
 
   ngOnInit() {
   }

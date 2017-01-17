@@ -4,6 +4,15 @@
   height: 30px;
 }
 
+.gearMenu {
+  padding-left:0px !important;
+  padding-right:5px !important;
+  text-align:right;
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
 /*#accordion .panel {
 	-webkit-box-shadow:none;
   box-shadow:none;
@@ -23,10 +32,10 @@
 }*/
 
 /* Small devices (tablets, 768px and up) */
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
   .div-collapse.collapse {
     display: block !important;
     height: auto !important;
     overflow: visible !important;
   }
-}
+}*/

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
-  selector: 'app-root',
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {

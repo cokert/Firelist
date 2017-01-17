@@ -1,5 +1,6 @@
 import { Component,
          OnInit,
+         Input,
          OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -7,11 +8,13 @@ import { ListsService } from './lists.service';
 import { ScreenSizeService } from '../../shared/screen-size.service';
 
 @Component({
-  selector: 'app-lists',
+  selector: 'app-lists, .app-lists',
   templateUrl: './lists.component.html',
   styleUrls: ['./lists.component.css']
 })
 export class ListsComponent implements OnInit, OnDestroy {
+
+  @Input() showChrome = true;
 
   constructor(private _lists : ListsService,
               private _router: Router,
@@ -24,6 +27,19 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     console.log('destroy');
+  }
+
+  getMenuData(key) {
+    return [{
+      label: "Delete",
+      action: {
+        func: this._lists.delete,
+        context: this._lists,
+        args: [
+          key
+        ]
+      }
+    }]
   }
 
   routeToList(key) {

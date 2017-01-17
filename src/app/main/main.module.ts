@@ -10,6 +10,7 @@ import { MainViewComponent } from './main-view.component';
 import { ItemsService } from './items/items.service';
 import { ListsService } from './lists/lists.service';
 import { PathBuilderService } from '../shared/pathbuilder.service';
+import { GearMenuComponent } from '../shared/gearmenu.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { PathBuilderService } from '../shared/pathbuilder.service';
     ItemsComponent,
     ListsComponent,
     NewListComponent,
-    MainViewComponent
+    MainViewComponent,
+    GearMenuComponent
   ],
   exports: [
     ItemsComponent,

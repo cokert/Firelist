@@ -73,6 +73,11 @@ export class ListsService {
     this._items.setActiveListKey(listKey);
   }
 
+  delete(key) {
+    this._af.database.object(this._pb.buildListPath(key)).set(null);
+    this._af.database.object(this._pb.buildUserListPath(this._auth.userData.userId, key)).set(null);
+  }
+
   newList(name) {
     let userListPath = this._pb.buildUserListsPath(this._auth.userData.userId);
     //console.log("userListPath", userListPath);
