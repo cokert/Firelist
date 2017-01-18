@@ -1,8 +1,11 @@
 import { Component,
          OnInit,
          Input,
-         OnDestroy } from '@angular/core';
+         OnDestroy,
+         ViewContainerRef } from '@angular/core';
+import { Overlay } from 'angular2-modal';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { ListsService } from './lists.service';
 import { ScreenSizeService } from '../../shared/screen-size.service';
@@ -19,7 +22,12 @@ export class ListsComponent implements OnInit, OnDestroy {
   constructor(private _lists : ListsService,
               private _router: Router,
               private _route: ActivatedRoute,
-              private _sizeService: ScreenSizeService) { }
+              private _sizeService: ScreenSizeService,
+              overlay: Overlay,
+              vcRef: ViewContainerRef,
+              private _modal: Modal) {
+    overlay.defaultViewContainer = vcRef;
+}
 
   ngOnInit() {
     console.log('lists component init');
@@ -42,13 +50,24 @@ export class ListsComponent implements OnInit, OnDestroy {
     }, {
       label: "Share",
       action: {
-        func: this._lists.share,
-        context: this._lists,
+        func: this.showModal,
+        context: this,
         args: [
           key
         ]
       }
     }]
+  }
+
+  showModal(listKey) {
+    var f = this._modal.prompt()
+      .size('sm')
+      .showClose(true)
+      .title('Enter email of recipient')
+      .open()
+      .then(x => x.result)
+      .then(x => this._lists.share(x, listKey));
+
   }
 
   routeToList(key) {

@@ -10,8 +10,11 @@ import { Component,
            <span class="glyphicon glyphicon-cog"></span>
            <!--<span class="caret"></span>-->
       </a>
-      <ul class="dropdown-menu app-lisfts">
-        <li (click)=performAction(i.action) *ngFor="let i of menuData" role="button">
+      <ul class="dropdown-menu">
+        <li [attr.data-toggle]="i.data_toggle ? i.data_toggle : ''"
+            [attr.data-target]="i.data_target ? i.data_target : ''"
+            (click)="performAction(i.action);"
+            *ngFor="let i of menuData" role="button">
           <a class="hand">
             {{ i.label }}
           </a>
@@ -27,6 +30,7 @@ export class GearMenuComponent implements OnInit {
   ngOnInit() { }
 
   performAction(action) {
+    if (!action) return;
     action.func.apply(action.context, action.args);
   }
 

@@ -13,9 +13,14 @@ import { PathBuilderService } from '../shared/pathbuilder.service';
 import { GearMenuComponent } from '../shared/gearmenu.component';
 import { UsersService } from '../users/users.service';
 
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    ModalModule.forRoot(),
+    BootstrapModalModule
   ],
   declarations: [
     ItemsComponent,

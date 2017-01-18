@@ -75,9 +75,8 @@ export class ListsService {
     this._items.setActiveListKey(listKey);
   }
 
-  share(listKey) {
-    var email = "milesjrcoker@gmail.com";
-    this._users.getUserByEmail(email).subscribe(x => {
+  share(email, listKey) {
+    this._users.getUserByEmail(email).take(1).subscribe(x => {
       var userId = x[0].userId;
       this._af.database.object(this._pb.buildUserListPath(userId, listKey)).set(true);
     })

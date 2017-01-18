@@ -28,4 +28,8 @@ export class UsersService {
       }
     });
   }
+
+  getUsers() {
+    return this._af.database.list(this._pb.buildUsersPath());
+  }
 }
