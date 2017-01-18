@@ -16,6 +16,7 @@ import 'rxjs/add/operator/map';
 import { AuthService } from '../../auth/auth.service';
 import { PathBuilderService } from '../../shared/pathbuilder.service';
 import { ItemsService } from '../items/items.service';
+import { UsersService } from '../../users/users.service';
 
 @Injectable()
 export class ListsService {
@@ -33,7 +34,8 @@ export class ListsService {
   constructor(private _auth: AuthService,
               private _af: AngularFire,
               private _pb: PathBuilderService,
-              private _items: ItemsService) {
+              private _items: ItemsService,
+              private _users: UsersService) {
     _auth.authChanged$.subscribe(x => {
       //if user is logged in
       if (x.userId) {
@@ -71,6 +73,14 @@ export class ListsService {
         this._listChanged.next(f);
     });
     this._items.setActiveListKey(listKey);
+  }
+
+  share(listKey) {
+    var email = "milesjrcoker@gmail.com";
+    this._users.getUserByEmail(email).subscribe(x => {
+      var userId = x[0].userId;
+      this._af.database.object(this._pb.buildUserListPath(userId, listKey)).set(true);
+    })
   }
 
   delete(key) {

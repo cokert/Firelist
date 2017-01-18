@@ -11,6 +11,7 @@ import { ItemsService } from './items/items.service';
 import { ListsService } from './lists/lists.service';
 import { PathBuilderService } from '../shared/pathbuilder.service';
 import { GearMenuComponent } from '../shared/gearmenu.component';
+import { UsersService } from '../users/users.service';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { GearMenuComponent } from '../shared/gearmenu.component';
     ListsService,
     ItemsService,
     AngularFire,
-    PathBuilderService
+    PathBuilderService,
+    UsersService
   ]
 })
 export class MainModule { }

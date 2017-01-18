@@ -39,6 +39,15 @@ export class ListsComponent implements OnInit, OnDestroy {
           key
         ]
       }
+    }, {
+      label: "Share",
+      action: {
+        func: this._lists.share,
+        context: this._lists,
+        args: [
+          key
+        ]
+      }
     }]
   }
 

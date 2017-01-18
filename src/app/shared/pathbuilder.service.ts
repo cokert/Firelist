@@ -33,8 +33,11 @@ export class PathBuilderService {
     return this.buildListItemsPath(listKey) + '/' + itemKey;
   }
 
+  buildUsersPath() {
+    return '/users';
+  }
   buildUserPath(userId) {
-    return '/users/' + userId;
+    return this.buildUsersPath() + '/' + userId;
   }
 
 }
