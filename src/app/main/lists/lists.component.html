@@ -6,22 +6,28 @@
     <div class="jumbotron" *ngIf="(_lists.usersListsChanged$ | async)?.length === 0">
       You have no lists yet.  Create one using the field below.
     </div>
-    <ul class='list-group'>
+    <ul class='list-group' id='listItems'>
       <li *ngFor="let l of _lists.usersListsChanged$ | async"
           [class.active]="l.$key === _lists.activeListKey"
-          [attr.data-toggle]="_sizeService.screenIsPhoneSized && _lists.activeListKey ? 'collapse' : ''"
-          data-target="#lists"
           class='list-group-item'>
-          <div class="row">
-            <div class="col-xs-11" (click)="routeToList(l.$key)" role="button">
+        <div class="pull-right gearMenu">
+          <app-gear-menu *ngIf="l.userIsOwner" [menuData]="getMenuData(l)"></app-gear-menu>
+        </div>
+        <div class="row">
+          <div class="listEntry">
+            <div class="col-xs-12"
+                data-target="#lists"
+                [attr.data-toggle]="_sizeService.screenIsPhoneSized && _lists.activeListKey ? 'collapse' : ''"
+                (click)="_router.navigate(['/lists', l.$key])"
+                role="button">
+              {{ l.name }}
               <a>
-                {{ (l.name | async)?.$value }}
+                <span class="glyphicon glyphicon-info-sign" (click)="showListDetails($event, l)">
+                </span>
               </a>
             </div>
-            <div class="col-xs-1 gearMenu">
-              <app-gear-menu [menuData]="getMenuData(l.$key)"></app-gear-menu>
-            </div>
           </div>
+        </div>
       </li>
     </ul>
     <app-list-new></app-list-new>
@@ -29,9 +35,9 @@
 </div>
 
 <ng-container *ngIf="!showChrome">
-  <li role="button" *ngFor="let l of _lists.usersListsChanged$ | async" (click)="routeToList(l.$key)">
+  <li role="button" *ngFor="let l of _lists.usersListsChanged$ | async" [routerLink] = "['/lists', l.$key]">
     <a class="hand">
-      {{ (l.name | async)?.$value }}
+      {{ l.name }}
     </a>
   </li>
 </ng-container>

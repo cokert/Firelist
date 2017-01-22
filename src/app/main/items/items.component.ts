@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ItemsService } from './items.service';
 import { ListsService } from '../lists/lists.service';
@@ -9,14 +10,26 @@ import { ListsService } from '../lists/lists.service';
   styleUrls: ['./items.component.css']
 })
 export class ItemsComponent implements OnInit {
-  private _listKey = null;
-  private _listName = null;
+  private _activeList = null;
 
-  dat =
-    [
-      {label: 'test', action: { func: alert, args: ['asdf', 2, 'arg2']}},
-      {label: 'test2', action: { func: alert, args: ['fdsa', 2, 'arg2']}}
-    ];
+  constructor(private _items: ItemsService,
+              private _lists: ListsService,
+              private _activedRoute: ActivatedRoute ) {
+  }
+
+  ngOnInit() {
+    this._activedRoute.params.subscribe(x =>
+      this._lists.getList(x["listKey"]).subscribe( y => {
+        this._activeList = y;
+        console.log('activelist: ', this._activeList);
+      }));
+    // this._lists.getList(this._activedRoute. )$.subscribe(x => {
+    //   if (x != '') {
+    //     this._listKey = x.key;
+    //     this._listName = x.name;
+    //   }
+    // });
+  }
 
   getMenuObject(listKey, itemKey) {
     return [
@@ -25,7 +38,7 @@ export class ItemsComponent implements OnInit {
       action: {
         func: this._items.archive,
         context: this._items,
-        args: [itemKey]
+        args: [listKey, itemKey]
       }
     },
     {
@@ -33,22 +46,9 @@ export class ItemsComponent implements OnInit {
       action: {
         func: this._items.delete,
         context: this._items,
-        args: [itemKey]
+        args: [listKey, itemKey]
       }
     }]
-  }
-
-  constructor(private _items: ItemsService,
-              private _lists: ListsService ) {
-  }
-
-  ngOnInit() {
-    this._lists.activeListChanged$.subscribe(x => {
-      if (x != '') {
-        this._listKey = x.key;
-        this._listName = x.name;
-      }
-    });
   }
 
 }

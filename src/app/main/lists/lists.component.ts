@@ -9,6 +9,7 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { ListsService } from './lists.service';
 import { ScreenSizeService } from '../../shared/screen-size.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-lists, .app-lists',
@@ -23,6 +24,7 @@ export class ListsComponent implements OnInit, OnDestroy {
               private _router: Router,
               private _route: ActivatedRoute,
               private _sizeService: ScreenSizeService,
+              private _auth: AuthService,
               overlay: Overlay,
               vcRef: ViewContainerRef,
               private _modal: Modal) {
@@ -30,49 +32,103 @@ export class ListsComponent implements OnInit, OnDestroy {
 }
 
   ngOnInit() {
-    console.log('lists component init');
+    this._lists.usersListsChanged$.subscribe(x => console.log("lists component init", x));
+    console.log("'lists component init'");
   }
 
   ngOnDestroy() {
     console.log('destroy');
   }
 
-  getMenuData(key) {
+  getMenuData(list) {
+    console.log('getting menu data', list);
     return [{
-      label: "Delete",
-      action: {
-        func: this._lists.delete,
-        context: this._lists,
-        args: [
-          key
-        ]
-      }
-    }, {
       label: "Share",
       action: {
-        func: this.showModal,
+        func: this.showEmailModal,
         context: this,
         args: [
-          key
+          list.$key
         ]
       }
-    }]
+    },{
+      label: "Delete",
+      action: {
+        func: this.confirmDelete,
+        context: this,
+        args: [
+          list
+        ]
+      }
+    },]
   }
 
-  showModal(listKey) {
-    var f = this._modal.prompt()
+  showEmailModal(listKey) {
+    this._modal.prompt()
       .size('sm')
       .showClose(true)
       .title('Enter email of recipient')
       .open()
-      .then(x => x.result)
-      .then(x => this._lists.share(x, listKey));
-
+      .then(resultPromise => {
+        resultPromise.result.then( result => {
+          this._lists.share(result, listKey);
+        }, () => console.log("email fail?")
+      )});
   }
 
-  routeToList(key) {
-    this._router.navigate(["lists", key]);
-    this._lists.selectList(key);
+  showListDetails(e: Event, list) {
+    e.stopImmediatePropagation();
+    this._modal.alert()
+      .size('lg')
+      .showClose(true)
+      .title('List Details')
+      .body(`
+        <div class='row'>
+          <div class='col-xs-3'>
+            Name:
+          </div>
+          <div class='col-xs-9'>
+            ` + list.name + `
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-xs-3'>
+            Creator:
+          </div>
+          <div class='col-xs-9'>
+            ` + list.creatorName + `
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-xs-3'>
+            Date Created:
+          </div>
+          <div class='col-xs-9'>
+            ` + list.dateCreated + `
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-xs-3'>
+            Number of users with access:
+          </div>
+          <div class='col-xs-9'>
+            ` + list.usersWithAccess.length + `
+          </div>
+        </div>`)
+      .open()
   }
 
+  confirmDelete(listKey) {
+    var f = this._modal.confirm()
+      .size('sm')
+      .showClose(false)
+      .title('Delete list?')
+      .body('This action is irreversible.')
+      .open()
+      .then(resultPromise => {
+        resultPromise.result.then(result => {
+          if (result) this._lists.delete(listKey);
+        }, () => true);
+      });
+  }
 }

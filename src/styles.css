@@ -4,13 +4,19 @@
   height: 30px;
 }
 
+.listEntry {
+  margin-right: 45px;
+}
+
 .gearMenu {
-  padding-left:0px !important;
+  width: 14px;
+  z-index:99999;
+  /*padding-left:0px !important;
   padding-right:5px !important;
   text-align:right;
   display: inline-block;
   vertical-align: middle;
-  float: none;
+  float: none;*/
 }
 
 /*#accordion .panel {

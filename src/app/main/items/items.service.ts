@@ -1,8 +1,6 @@
 import { Injectable,
          EventEmitter } from '@angular/core';
 import { AngularFire,
-         AuthProviders,
-         AuthMethods,
          FirebaseListObservable,
          FirebaseObjectObservable } from 'angularfire2';
 import { Observable} from 'rxjs/Observable';
@@ -18,69 +16,41 @@ import { PathBuilderService } from '../../shared/pathbuilder.service';
 @Injectable()
 export class ItemsService {
 
-  private _listItems: BehaviorSubject<any> = new BehaviorSubject<any>("");
-  private _archiveItems: BehaviorSubject<any> = new BehaviorSubject<any>("");
-  private _activeListSubscription;
-  private _activeArchiveSubscription;
-
-  listItemsChanged$ = this._listItems.asObservable();
-  listArchiveChanged$ = this._archiveItems.asObservable();
-
-  activeListItems = null;
-  activeListKey = null;
-
   constructor(private _af: AngularFire,
               private _pb: PathBuilderService) {
   }
 
-  setNoActiveList() {
-    //console.log('setting no active');
-    if (this._activeListSubscription) {
-      //console.log('unsubbed');
-      this._activeListSubscription.unsubscribe();
-    }
+  archive(listKey, itemKey) {
+    var sourcePath = this._pb.buildItemPath(listKey, itemKey);
+    var destinationPath = this._pb.buildArchivedItemPath(listKey, itemKey)
+    this.moveItem(sourcePath, destinationPath);
   }
 
-  archive(itemKey) {
-    var itemPath = this._pb.buildItemPath(this.activeListKey, itemKey);
-    this._af.database.object(itemPath).take(1).subscribe(x => {
-      var archivePath = this._pb.buildArchiveItemPath(this.activeListKey, itemKey);
-      var f = { name: x.name, complete: x.complete };
-      this._af.database.object(archivePath).set(f);
-      this._af.database.object(itemPath).set(null);
+  moveItem(sourcePath, destinationPath) {
+    this.copyItem(sourcePath, destinationPath);
+    this._af.database.object(sourcePath).set(null);
+  }
+
+  copyItem(sourcePath, destinationPath) {
+    this._af.database.object(sourcePath).take(1).subscribe(x => {
+      delete x.$key;
+      delete x.$exists;
+      this._af.database.object(destinationPath).set(x);
     });
   }
 
-  restore(itemKey) {
-    var archivePath = this._pb.buildArchiveItemPath(this.activeListKey, itemKey);
-    this._af.database.object(archivePath).take(1).subscribe(x => {
-      var itemPath = this._pb.buildItemPath(this.activeListKey, itemKey);
-      console.log("archivePath", archivePath, "itemPath", itemPath, "key", this.activeListKey, "itemKey", itemKey);
-      var f = { name: x.name, complete: x.complete };
-      this._af.database.object(itemPath).set(f);
-      this._af.database.object(archivePath).set(null);
-    });
+  restore(listKey, itemKey) {
+    var sourcePath = this._pb.buildArchivedItemPath(listKey, itemKey);
+    var destinationPath = this._pb.buildItemPath(listKey, itemKey);
+    this.moveItem(sourcePath, destinationPath);
   }
 
-  delete(itemKey) {
-    this._af.database.object(this._pb.buildItemPath(this.activeListKey, itemKey)).set(null);
-  }
-
-  setActiveListKey(listKey) {
-    if (this._activeListSubscription) this._activeListSubscription.unsubscribe();
-    this.activeListKey = listKey;
-    this._activeListSubscription = this._af.database.list(this._pb.buildListItemsPath(listKey)).subscribe(x => {
-      //console.log("activeListSub, pushing ", x);
-      this._listItems.next(x)
-    });
-    this._activeArchiveSubscription = this._af.database.list(this._pb.buildArchiveItemsPath(listKey)).subscribe(x => {
-      this._archiveItems.next(x);
-    })
+  delete(listKey, itemKey) {
+    this._af.database.object(this._pb.buildItemPath(listKey, itemKey)).set(null);
   }
 
   addToList(key, value) {
     let path = this._pb.buildListItemsPath(key);
-    //console.log('service.addToList', key, value, path);
     this._af.database.list(path).push({
       name: value,
       complete: false
@@ -89,8 +59,6 @@ export class ItemsService {
 
   toggleCompletionState(listKey, itemKey, completionState) {
     let path = this._pb.buildItemPath(listKey, itemKey);
-    //console.log('toggleCompletionState', path);
     this._af.database.object(path).update({ complete: completionState});
   }
-
 }

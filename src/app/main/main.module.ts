@@ -1,6 +1,8 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AngularFire } from 'angularfire2';
+import { RouterModule } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
 import { ItemsComponent } from './items/items.component';
@@ -18,6 +20,7 @@ import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 @NgModule({
   imports: [
+    RouterModule,
     CommonModule,
     ModalModule.forRoot(),
     BootstrapModalModule

@@ -1,5 +1,6 @@
 <app-nav></app-nav>
 
 <div class='container'>
-  <router-outlet></router-outlet>
+  <app-home *ngIf="!_auth.userData.userId"></app-home>
+  <router-outlet *ngIf="_auth.userData.userId"></router-outlet>
 </div>

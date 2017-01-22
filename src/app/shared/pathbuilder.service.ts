@@ -13,20 +13,23 @@ export class PathBuilderService {
     return this.buildUserListsPath(userId) + '/' + listId;
   }
 
+  buildListsPath() {
+    return '/lists';
+  }
   buildListPath(listKey) {
-    return '/lists/' + listKey;
+    return this.buildListsPath() + '/' + listKey;
   }
 
   buildListItemsPath(listKey) {
     return this.buildListPath(listKey) + '/items';
   }
 
-  buildArchiveItemsPath(listKey) {
+  buildListArchivePath(listKey) {
     return this.buildListPath(listKey) + '/archive';
   }
 
-  buildArchiveItemPath(listKey, itemKey) {
-    return this.buildArchiveItemsPath(listKey) + '/' + itemKey;
+  buildArchivedItemPath(listKey, itemKey) {
+    return this.buildListArchivePath(listKey) + '/' + itemKey;
   }
 
   buildItemPath(listKey, itemKey) {
