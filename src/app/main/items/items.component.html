@@ -34,10 +34,16 @@
     <input #newListItem type="text" class="form-control">
     <button class="btn btn-default" (click)="_items.addToList(_activeList.$key, newListItem.value);newListItem.value='';">save</button>
   </div>
+</div>
 
-  <ul>
-    <li *ngFor="let a of _activeList.archive | async">
-      <a (click)="_items.restore(_activeList.$key, a.$key)" >{{ a.name }}</a>
-    </li>
-  </ul>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Archived items</h3>
+  </div>
+  <div class="panel-body">
+    <p>Click an item to restore</p>
+    <button *ngFor="let a of _activeList.archive | async" class="btn btn-default" (click)="_items.restore(_activeList.$key, a.$key)">
+      {{ a.name }}
+    </button>
+  </div>
 </div>

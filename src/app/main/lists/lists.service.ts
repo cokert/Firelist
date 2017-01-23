@@ -112,7 +112,8 @@ export class ListsService {
   share(email: string, list: List) {
     this._users.getUserByEmail(email).take(1).subscribe(x => {
       var userId = x[0].userId;
-      this._af.database.object(this._pb.buildUserListPath(userId, list.$key)).set(true);
+      console.log("sharing list", this._pb.buildUserListPath(userId, list.$key));
+      this._af.database.object(this._pb.buildUserListPath(userId, list.$key)).set("true");
     })
   }
 

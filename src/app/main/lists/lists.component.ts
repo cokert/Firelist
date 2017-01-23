@@ -41,14 +41,14 @@ export class ListsComponent implements OnInit, OnDestroy {
   }
 
   getMenuData(list) {
-    console.log('getting menu data', list);
+    //console.log('getting menu data', list);
     return [{
       label: "Share",
       action: {
         func: this.showEmailModal,
         context: this,
         args: [
-          list.$key
+          list
         ]
       }
     },{
