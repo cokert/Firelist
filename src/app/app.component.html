@@ -2,5 +2,5 @@
 
 <div class='container'>
   <app-home *ngIf="!_auth.userData.userId"></app-home>
-  <router-outlet *ngIf="_auth.userData.userId"></router-outlet>
+  <router-outlet></router-outlet>
 </div>

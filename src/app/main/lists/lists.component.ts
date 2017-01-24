@@ -18,8 +18,6 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class ListsComponent implements OnInit, OnDestroy {
 
-  @Input() showChrome = true;
-
   constructor(private _lists : ListsService,
               private _router: Router,
               private _route: ActivatedRoute,
@@ -74,48 +72,6 @@ export class ListsComponent implements OnInit, OnDestroy {
           this._lists.share(result, listKey);
         }, () => console.log("email fail?")
       )});
-  }
-
-  showListDetails(e: Event, list) {
-    e.stopImmediatePropagation();
-    this._modal.alert()
-      .size('lg')
-      .showClose(true)
-      .title('List Details')
-      .body(`
-        <div class='row'>
-          <div class='col-xs-3'>
-            Name:
-          </div>
-          <div class='col-xs-9'>
-            ` + list.name + `
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-xs-3'>
-            Creator:
-          </div>
-          <div class='col-xs-9'>
-            ` + list.creatorName + `
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-xs-3'>
-            Date Created:
-          </div>
-          <div class='col-xs-9'>
-            ` + list.dateCreated + `
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-xs-3'>
-            Number of users with access:
-          </div>
-          <div class='col-xs-9'>
-            ` + list.usersWithAccess.length + `
-          </div>
-        </div>`)
-      .open()
   }
 
   confirmDelete(listKey) {

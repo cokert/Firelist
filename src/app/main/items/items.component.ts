@@ -10,7 +10,9 @@ import { ListsService } from '../lists/lists.service';
   styleUrls: ['./items.component.css']
 })
 export class ItemsComponent implements OnInit {
+
   private _activeList = null;
+  private _activeListKey = null;
 
   constructor(private _items: ItemsService,
               private _lists: ListsService,
@@ -18,17 +20,10 @@ export class ItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._activedRoute.params.subscribe(x =>
-      this._lists.getList(x["listKey"]).subscribe( y => {
-        this._activeList = y;
-        console.log('activelist: ', this._activeList);
-      }));
-    // this._lists.getList(this._activedRoute. )$.subscribe(x => {
-    //   if (x != '') {
-    //     this._listKey = x.key;
-    //     this._listName = x.name;
-    //   }
-    // });
+    this._activedRoute.params.subscribe(x => {
+      this._activeList = this._lists.getList(x["listKey"])
+      this._activeList.subscribe(x => this._activeListKey = x.$key);
+    });
   }
 
   getMenuObject(listKey, itemKey) {
@@ -50,5 +45,4 @@ export class ItemsComponent implements OnInit {
       }
     }]
   }
-
 }

@@ -23,5 +23,18 @@
   </div>
 </div>
 <div class="col-sm-9">
-  <app-items></app-items>
+  <ul class="nav nav-tabs">
+    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <a [routerLink]="['/lists', (_activatedRoute.params | async)['listKey']]">Items</a>
+    </li>
+    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <a [routerLink]="['/lists', (_activatedRoute.params | async)['listKey'], 'manage']">Manage</a>
+    </li>
+    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <a [routerLink]="['/lists', (_activatedRoute.params | async)['listKey'], 'details']">Details</a>
+    </li>
+  </ul>
+  <app-items *ngIf="_activeView === 'items'"></app-items>
+  <app-list-manage *ngIf="_activeView === 'manage'"></app-list-manage>
+  <app-list-details *ngIf="_activeView === 'details'"></app-list-details>
 </div>

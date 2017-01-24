@@ -1,4 +1,4 @@
-<div *ngIf="showChrome" class="panel panel-default">
+<div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Available Lists</h3>
   </div>
@@ -21,10 +21,6 @@
                 (click)="_router.navigate(['/lists', l.$key])"
                 role="button">
               {{ l.name }}
-              <a>
-                <span class="glyphicon glyphicon-info-sign" (click)="showListDetails($event, l)">
-                </span>
-              </a>
             </div>
           </div>
         </div>
@@ -33,11 +29,3 @@
     <app-list-new></app-list-new>
   </div>
 </div>
-
-<ng-container *ngIf="!showChrome">
-  <li role="button" *ngFor="let l of _lists.usersListsChanged$ | async" [routerLink] = "['/lists', l.$key]">
-    <a class="hand">
-      {{ l.name }}
-    </a>
-  </li>
-</ng-container>

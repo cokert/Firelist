@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { ItemsComponent } from './items/items.component';
 import { ListsComponent } from './lists/lists.component';
+import { MinimalListsComponent } from './lists/minimal-lists.component';
 import { NewListComponent } from './lists/new-list.component';
 import { MainViewComponent } from './main-view.component';
 import { ItemsService } from './items/items.service';
@@ -17,6 +18,8 @@ import { UsersService } from '../users/users.service';
 
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { ManageListComponent } from './lists/manage/manage.component';
+import { DetailsComponent } from './lists/details/details.component';
 
 @NgModule({
   imports: [
@@ -28,13 +31,16 @@ import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
   declarations: [
     ItemsComponent,
     ListsComponent,
+    MinimalListsComponent,
     NewListComponent,
     MainViewComponent,
-    GearMenuComponent
+    GearMenuComponent,
+    ManageListComponent,
+    DetailsComponent
   ],
   exports: [
     ItemsComponent,
-    ListsComponent,
+    MinimalListsComponent,
     NewListComponent,
     MainViewComponent,
   ],

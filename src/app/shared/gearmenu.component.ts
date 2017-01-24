@@ -34,33 +34,35 @@ declare var $:any;
 export class GearMenuComponent implements OnInit, OnDestroy {
   @Input() menuData = null;
 
-  private _menu = null;
-
   constructor() { console.log('gearmenu'); }
 
   ngOnInit() {
     $('html').click(function(e) {
-      console.log("gearmenu click", this._menu);
-      if (this._menu && this._menu.is(':visible')) {
-        console.log("hiding?");
-        this._menu.hide();
-      }
+      $('.gear-menu').each(function() {
+        var m = $(this)
+        if (m.is(':visible')) {
+          m.hide();
+        }
+      })
     });
   }
 
-  ngOnDestroy() { console.log('gearmenu destroy'); }
+  ngOnDestroy() {
+    $('html').off("click");
+  }
 
   showMenu(event) {
-    this._menu = $(event.target).parent().parent().children('ul');
+    event.stopImmediatePropagation();
+    let menu = $(event.target).parent().parent().children('ul');
 
-    if (this._menu.is(':visible')) {
-      this._menu.hide();
+    if (menu.is(':visible')) {
+      menu.hide();
       return;
     }
-    this._menu.show();
+    menu.show();
 
     var left = event.clientX;
-    var width = this._menu.width();
+    var width = menu.width();
     var gearIconWidth = $(event.target).width();
     var offset = -width + gearIconWidth;
     var docWidth = $(".container").width();
@@ -68,16 +70,15 @@ export class GearMenuComponent implements OnInit, OnDestroy {
     var isEntirelyVisible = (left + width <= docWidth);
 
     if (!isEntirelyVisible) {
-      this._menu.css({left: offset + 'px'});
+      menu.css({left: offset + 'px'});
     } else {
-      this._menu.css({left: '0px'});
+      menu.css({left: '0px'});
     }
   }
 
   performAction(action) {
     if (!action) return;
     action.func.apply(action.context, action.args);
-    this._menu.hide();
   }
 
 }
