@@ -16,12 +16,12 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent implements OnInit {
 
-  private _userData = null;
+  userData = null;
 
-  constructor(private _auth: AuthService) { }
+  constructor(public auth: AuthService) { }
 
   ngOnInit() {
-    this._auth.authChanged$.subscribe(x => this._userData = x);
+    this.auth.authChanged$.subscribe(x => this.userData = x);
   }
 
 }

@@ -3,12 +3,12 @@
     <h3 class="panel-title">Available Lists</h3>
   </div>
   <div id="available-lists" class="panel-body">
-    <div class="jumbotron" *ngIf="(_lists.usersListsChanged$ | async)?.length === 0">
+    <div class="jumbotron" *ngIf="(lists.usersListsChanged$ | async)?.length === 0">
       You have no lists yet.  Create one using the field below.
     </div>
     <ul class='list-group' id='listItems'>
-      <li *ngFor="let l of _lists.usersListsChanged$ | async"
-          [class.active]="l.$key === _lists.activeListKey"
+      <li *ngFor="let l of lists.usersListsChanged$ | async"
+          [class.active]="l.$key === lists.activeListKey"
           class='list-group-item'>
         <div class="pull-right gearMenu">
           <app-gear-menu *ngIf="l.userIsOwner" [menuData]="getMenuData(l)"></app-gear-menu>
@@ -17,10 +17,10 @@
           <div class="listEntry">
             <div class="col-xs-12"
                 data-target="#lists"
-                [attr.data-toggle]="_sizeService.screenIsPhoneSized && _lists.activeListKey ? 'collapse' : ''"
-                (click)="_router.navigate(['/lists', l.$key])"
+                [attr.data-toggle]="sizeService.screenIsPhoneSized && (_route.params | async)['listKey'] ? 'collapse' : ''"
+                (click)="router.navigate(['/lists', l.$key])"
                 role="button">
-              {{ l.name }}
+              {{ l.name === "" ? "[no name]" : l.name }}
             </div>
           </div>
         </div>

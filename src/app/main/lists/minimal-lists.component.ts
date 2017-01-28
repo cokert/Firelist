@@ -1,10 +1,10 @@
 import { Component,
          OnInit } from '@angular/core';
 
-import { ListsService } from './lists.service'
+import { ListsService } from './lists.service';
 
 @Component({
-  selector: '.app-lists-minimal',
+  selector: 'app-lists-minimal, .app-lists-minimal',
   template: `
     <ng-container>
       <li role="button" *ngFor="let l of _lists.usersListsChanged$ | async" [routerLink] = "['/lists', l.$key]">

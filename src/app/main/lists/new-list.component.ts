@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ListsService } from './lists.service'
+import { ListsService } from './lists.service';
 
 @Component({
   selector: 'app-list-new',
@@ -8,7 +8,7 @@ import { ListsService } from './lists.service'
             <div>
               New List: <input class='form-control' #id type="text" name="" value="">
               <button class='btn btn-default'
-                      (click)="_lists.newList(id.value);id.value='';"
+                      (click)="lists.newList(id.value);id.value='';"
                       data-toggle="collapse"
                       data-target="#lists">save
               </button>
@@ -17,7 +17,7 @@ import { ListsService } from './lists.service'
 })
 export class NewListComponent implements OnInit {
 
-  constructor(private _lists: ListsService) { }
+  constructor(public lists: ListsService) { }
 
   ngOnInit() {
   }

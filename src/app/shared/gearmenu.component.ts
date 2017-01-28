@@ -3,23 +3,23 @@ import { Component,
          OnDestroy,
          Input } from '@angular/core';
 
-declare var $:any;
+declare let $: any;
 
 @Component({
   selector: 'app-gear-menu',
   template: `
-    <span class="dropdown">
-      <a aria-haspopup="true"
-          class="dropdown-toggle"
-          role="button"
-          (click)="showMenu($event)">
-        <span class="glyphicon glyphicon-cog"></span>
+    <span class='dropdown'>
+      <a aria-haspopup='true'
+          class='dropdown-toggle'
+          role='button'
+          (click)='showMenu($event)'>
+        <span class='glyphicon glyphicon-cog'></span>
       </a>
-      <ul class="dropdown-menu gear-menu">
-        <li [attr.data-toggle]="i.data_toggle ? i.data_toggle : ''"
-            [attr.data-target]="i.data_target ? i.data_target : ''"
-            (click)="performAction(i.action);"
-            *ngFor="let i of menuData" role="button">
+      <ul class='dropdown-menu gear-menu'>
+        <li [attr.data-toggle]='i.data_toggle ? i.data_toggle : ""'
+            [attr.data-target]='i.data_target ? i.data_target : ""'
+            (click)='performAction(i.action);'
+            *ngFor='let i of menuData' role='button'>
           <a>
             {{ i.label }}
           </a>
@@ -34,21 +34,21 @@ declare var $:any;
 export class GearMenuComponent implements OnInit, OnDestroy {
   @Input() menuData = null;
 
-  constructor() { console.log('gearmenu'); }
+  constructor() { }
 
   ngOnInit() {
     $('html').click(function(e) {
       $('.gear-menu').each(function() {
-        var m = $(this)
+        let m = $(this);
         if (m.is(':visible')) {
           m.hide();
         }
-      })
+      });
     });
   }
 
   ngOnDestroy() {
-    $('html').off("click");
+    $('html').off('click');
   }
 
   showMenu(event) {
@@ -61,13 +61,13 @@ export class GearMenuComponent implements OnInit, OnDestroy {
     }
     menu.show();
 
-    var left = event.clientX;
-    var width = menu.width();
-    var gearIconWidth = $(event.target).width();
-    var offset = -width + gearIconWidth;
-    var docWidth = $(".container").width();
+    let left = event.clientX;
+    let width = menu.width();
+    let gearIconWidth = $(event.target).width();
+    let offset = -width + gearIconWidth;
+    let docWidth = $('.container').width();
 
-    var isEntirelyVisible = (left + width <= docWidth);
+    let isEntirelyVisible = (left + width <= docWidth);
 
     if (!isEntirelyVisible) {
       menu.css({left: offset + 'px'});
@@ -77,7 +77,7 @@ export class GearMenuComponent implements OnInit, OnDestroy {
   }
 
   performAction(action) {
-    if (!action) return;
+    if (!action) { return; }
     action.func.apply(action.context, action.args);
   }
 

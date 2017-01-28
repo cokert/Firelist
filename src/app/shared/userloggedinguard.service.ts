@@ -14,8 +14,7 @@ export class UserIsLoggedInGuard implements CanActivate {
               private _auth: AuthService) {}
 
   canActivate() {
-    if (!this._auth.userData)
-      return false;
+    if (!this._auth.userData) { return false; }
 
     return this._auth.userData.userId != null;
   }

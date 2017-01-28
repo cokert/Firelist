@@ -26,7 +26,9 @@ export class List {
   creatorId: string;
   dateCreated: string;
   userIsOwner: boolean;
-  usersWithAccess: any[];
+  usersWithAccess: FirebaseListObservable<any>;
+  items: FirebaseListObservable<any>;
+  archive: FirebaseListObservable<any>;
   creatorName: string;
 }
 
@@ -35,8 +37,8 @@ export class ListsService {
 
   private _listsSubscription;
   private _activeListSubscription;
-  private _usersLists: BehaviorSubject<any> = new BehaviorSubject<any>("");
-  private _listChanged: BehaviorSubject<any> = new BehaviorSubject<any>("");
+  private _usersLists: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  private _listChanged: BehaviorSubject<any> = new BehaviorSubject<any>('');
 
   usersListsChanged$ = this._usersLists.asObservable();
   activeListChanged$ = this._listChanged.asObservable();
@@ -51,7 +53,7 @@ export class ListsService {
               private _router: Router) {
 
     _auth.authChanged$.subscribe(x => {
-      //if user is logged in
+      // if user is logged in
       if (x.userId) {
         let userListPath = this._pb.buildUserListsPath(x.userId);
         this._listsSubscription = this._af.database.list(userListPath)
@@ -61,19 +63,18 @@ export class ListsService {
             });
             console.log('inside map', lists);
             return lists;
-          }).subscribe(x => { console.log('emitting', x); this._usersLists.next(x); });
-      }
-      else {
-        if (this._listsSubscription) this._listsSubscription.unsubscribe();
-        if (this._activeListSubscription) this._activeListSubscription.unsubscribe();
+          }).subscribe(y => { console.log('emitting', y); this._usersLists.next(y); });
+      } else {
+        if (this._listsSubscription) { this._listsSubscription.unsubscribe(); };
+        if (this._activeListSubscription) { this._activeListSubscription.unsubscribe(); };
         this._usersLists.next([]);
         this._listChanged.next([]);
       }
-    })
+    });
   }
 
   private _fillListDetails(list: List) {
-    var path = this._pb.buildListPath(list.$key);
+    let path = this._pb.buildListPath(list.$key);
     this._af.database.object(path).subscribe(y => {
       list.name = y.name;
       list.creatorId = y.creator;
@@ -97,40 +98,41 @@ export class ListsService {
   }
 
   getUsersWithListAccess(list: List) {
-    list.usersWithAccess = [];
-    this._af.database.list(this._pb.buildUsersPath(), {
+    list.usersWithAccess = this._af.database.list(this._pb.buildUsersPath(), {
       query: {
         orderByChild: 'lists/' + list.$key,
-        equalTo: "true"
+        equalTo: 'true'
       }
-    }).subscribe(x => {
-      for(var i = 0; i < x.length; i ++)
-        list.usersWithAccess.push(x[i]);
     });
   }
 
-  share(email: string, list: List) {
+  share(email: string, listKey: any) {
     this._users.getUserByEmail(email).take(1).subscribe(x => {
-      var userId = x[0].userId;
-      console.log("sharing list", this._pb.buildUserListPath(userId, list.$key));
-      this._af.database.object(this._pb.buildUserListPath(userId, list.$key)).set("true");
-    })
+      let userId = x[0].userId;
+      console.log('sharing list', this._pb.buildUserListPath(userId, listKey));
+      this._af.database.object(this._pb.buildUserListPath(userId, listKey)).set('true');
+    });
   }
 
-  delete(list: List) {
-    console.log('deleting?');
-    console.log('listpath', this._pb.buildListPath(list.$key));
-    console.log('list:', list);
-    list.usersWithAccess.forEach( u => {
-      console.log('removing access for', u.displayName, 'path', this._pb.buildUserListPath(u.$key, list.$key));
-      this._af.database.object(this._pb.buildUserListPath(u.$key, list.$key)).remove();
+  delete(list: FirebaseListObservable<List>) {
+    list.delay(10).subscribe( (x: List) => {
+      console.log('listpath', this._pb.buildListPath(x.$key), 'list', x, 'keys', Object.keys(x));
+      console.log("userswithaccess", x['usersWithAccess']);
+      x.usersWithAccess.forEach( u => {
+        console.log('removing access for', u.displayName, 'path', this._pb.buildUserListPath(u.$key, x.$key));
+        this.removeAccess(u.$key, x.$key);
+      });
+      this._af.database.object(this._pb.buildListPath(x.$key)).remove();
     });
-    this._af.database.object(this._pb.buildListPath(list.$key)).remove();
+  }
+
+  removeAccess(userKey, listKey) {
+    this._af.database.object(this._pb.buildUserListPath(userKey, listKey)).remove();
   }
 
   newList(name) {
     let userListPath = this._pb.buildUserListsPath(this._auth.userData.userId);
-    this._af.database.list(userListPath).push("true")
+    this._af.database.list(userListPath).push('true')
       .then(x => {
         this._af.database.object(this._pb.buildListPath(x.key)).set({
             name: name,
@@ -139,5 +141,12 @@ export class ListsService {
           });
           this._router.navigate(['/lists/', x.key]);
       });
+  }
+
+  rename(listKey, name) {
+    let listPath = this._pb.buildListPath(listKey);
+    this._af.database.object(listPath).update({
+      name: name
+    });
   }
 }

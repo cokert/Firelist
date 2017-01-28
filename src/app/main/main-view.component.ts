@@ -1,8 +1,10 @@
 import { Component,
          OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,
+         Router,
+         UrlTree } from '@angular/router';
 
-import { ListsService } from './lists/lists.service'
+import { ListsService } from './lists/lists.service';
 import { ScreenSizeService } from '../shared/screen-size.service';
 
 @Component({
@@ -11,25 +13,32 @@ import { ScreenSizeService } from '../shared/screen-size.service';
 })
 export class MainViewComponent implements OnInit {
 
-  _activeList = null;
-  _activeView = "";
+  activeList = null;
+  activeListKey = null;
+  activeView = '';
 
-  constructor(private _lists: ListsService,
-              private _sizeService: ScreenSizeService,
-              private _activatedRoute: ActivatedRoute) { }
+  constructor(public lists: ListsService,
+              public sizeService: ScreenSizeService,
+              public activatedRoute: ActivatedRoute,
+              public router: Router) { }
 
   ngOnInit() {
-    this._activatedRoute.url.subscribe(segments => {
+    this.activatedRoute.url.subscribe(segments => {
       if (segments.length === 2) {
-        this._activeView = 'items';
-      }
-      else if (segments.length === 3) {
-        this._activeView = segments[2].path;
+        // we're at /lists/<id>/, load just the items component
+        this.activeView = 'items';
+      } else if (segments.length === 3) {
+        // we're at either /lists/<id>/manage or /lists/<id>/details
+        this.activeView = segments[2].path;
       }
     });
-    this._activatedRoute.params.subscribe(x =>
-      this._lists.getList(x["listKey"]).subscribe( y => {
-        this._activeList = y;
-      }));
+    this.activatedRoute.params.subscribe(x => {
+      this.activeList = this.lists.getList(x['listKey']);
+      this.activeListKey = x['listKey'];
+    });
+  }
+
+  isActive(instruction: any[]): boolean {
+    return this.router.isActive(this.router.createUrlTree(instruction), true);
   }
 }

@@ -21,8 +21,8 @@ export class ItemsService {
   }
 
   archive(listKey, itemKey) {
-    var sourcePath = this._pb.buildItemPath(listKey, itemKey);
-    var destinationPath = this._pb.buildArchivedItemPath(listKey, itemKey)
+    let sourcePath = this._pb.buildItemPath(listKey, itemKey);
+    let destinationPath = this._pb.buildArchivedItemPath(listKey, itemKey);
     this.moveItem(sourcePath, destinationPath);
   }
 
@@ -39,9 +39,15 @@ export class ItemsService {
     });
   }
 
+  rename(listKey, itemKey, name) {
+    //console.log("rename", listKey, itemKey, name);
+    let path = this._pb.buildItemPath(listKey, itemKey);
+    this._af.database.object(path).update({ name: name});
+  }
+
   restore(listKey, itemKey) {
-    var sourcePath = this._pb.buildArchivedItemPath(listKey, itemKey);
-    var destinationPath = this._pb.buildItemPath(listKey, itemKey);
+    let sourcePath = this._pb.buildArchivedItemPath(listKey, itemKey);
+    let destinationPath = this._pb.buildItemPath(listKey, itemKey);
     this.moveItem(sourcePath, destinationPath);
   }
 

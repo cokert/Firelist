@@ -15,7 +15,7 @@
             </button>
           </p>
         </div>
-        <div class="col-xs-12 " id="lists" [class.collapse]="_sizeService.screenIsPhoneSized">
+        <div class="col-xs-12 " id="lists" [class.collapse]="sizeService.screenIsPhoneSized">
           <app-lists></app-lists>
         </div>
       </div>
@@ -24,17 +24,27 @@
 </div>
 <div class="col-sm-9">
   <ul class="nav nav-tabs">
-    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-      <a [routerLink]="['/lists', (_activatedRoute.params | async)['listKey']]">Items</a>
+    <li role="presentation" [class.active]="isActive(['/lists', (activatedRoute.params | async)['listKey']])">
+      <a [routerLink]="['/lists', (activatedRoute.params | async)['listKey']]">Items</a>
     </li>
-    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-      <a [routerLink]="['/lists', (_activatedRoute.params | async)['listKey'], 'manage']">Manage</a>
+    <li *ngIf="(activeList | async)?.userIsOwner" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <a [routerLink]="['/lists', (activatedRoute.params | async)['listKey'], 'manage']">Manage</a>
     </li>
-    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-      <a [routerLink]="['/lists', (_activatedRoute.params | async)['listKey'], 'details']">Details</a>
+    <li *ngIf="!(activeList | async)?.userIsOwner" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <a [routerLink]="['/lists', (activatedRoute.params | async)['listKey'], 'details']">Details</a>
     </li>
   </ul>
-  <app-items *ngIf="_activeView === 'items'"></app-items>
-  <app-list-manage *ngIf="_activeView === 'manage'"></app-list-manage>
-  <app-list-details *ngIf="_activeView === 'details'"></app-list-details>
+  <app-items
+    *ngIf="activeView === 'items'"
+    [activeList]="activeList"
+    [activeListKey]="activeListKey"></app-items>
+  <app-list-manage
+    *ngIf="activeView === 'manage'"
+    [activeList]="activeList"
+    [activeListKey]="activeListKey"
+    [creatorId]="(activeList | async)?.creatorId"></app-list-manage>
+  <app-list-details
+    *ngIf="activeView === 'details'"
+    [activeList]="activeList"
+    [activeListKey]="activeListKey"></app-list-details>
 </div>

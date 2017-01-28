@@ -26,7 +26,7 @@ export class AuthService {
               private _pb: PathBuilderService) {
     this._af.auth.subscribe(x => {
       if (x) {
-        //console.log("logged in", x);
+        // console.log("logged in", x);
         this.userData = {
           userId: x.uid,
           userPicture: x.google.photoURL,
@@ -37,7 +37,7 @@ export class AuthService {
         let p = _pb.buildUserPath(this.userData.userId);
         this._af.database.object(p).update(this.userData);
       } else {
-        //console.log("not logged in", x);
+        // console.log("not logged in", x);
         this.userData = this._nullUser;
       };
       this._authChanged.next(this.userData);

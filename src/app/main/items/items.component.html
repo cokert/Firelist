@@ -1,30 +1,30 @@
+<h2>{{ (activeList | async)?.name }} </h2>
 
-<h2>{{ (_activeList | async)?.name }} </h2>
-
-<div class="jumbotron" *ngIf="!_activeList">
+<div class="jumbotron" *ngIf="!activeList">
   <h3>Select an available list or create a new one</h3>
   <app-list-new></app-list-new>
 </div>
 
-<div class="panel panel-default" *ngIf="_activeList">
+<div class="panel panel-default" *ngIf="activeList">
   <div class="panel-heading">
     <h3 class="panel-title">Items</h3>
   </div>
   <div class="panel-body">
-    <div class="jumbotron" *ngIf="(_activeList | async)?.items.length === 0">
+    <div class="jumbotron" *ngIf="((activeList | async)?.items | async)?.length === 0">
       This list is empty.  Add items using the field below.
     </div>
     <ul class="list-group">
       <li class='list-group-item'
-          *ngFor="let i of (_activeList | async)?.items | async">
+          *ngFor="let i of (activeList | async)?.items | async"
+          role="button">
         <div class='pull-right gearMenu'>
-          <app-gear-menu [menuData]="getMenuObject(_activeListKey, i.$key)"></app-gear-menu>
+          <a><span class="fa fa-archive" (click)="items.archive(activeListKey, i.$key)"></span></a>
         </div>
         <div class="listEntry">
           <div class="row">
             <div class='col-xs-12'
                 role="button"
-                (click)="_items.toggleCompletionState(_activeListKey, i.$key, !i.complete)">
+                (click)="items.toggleCompletionState(activeListKey, i.$key, !i.complete)">
               <input class="" type="checkbox" [checked]="i.complete">
               {{ i.name }}
             </div>
@@ -34,16 +34,16 @@
     </ul>
     Add to list:
     <input #newListItem type="text" class="form-control">
-    <button class="btn btn-default" (click)="_items.addToList(_activeListKey, newListItem.value);newListItem.value='';">save</button>
+    <button class="btn btn-default" (click)="items.addToList(activeListKey, newListItem.value);newListItem.value='';">save</button>
   </div>
 </div>
 
-<div *ngIf="((_activeList | async)?.archive | async)?.length > 0" class="panel panel-default">
-  <div class="panel-heading"
+<div *ngIf="((activeList | async)?.archive | async)?.length > 0" class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"
        data-toggle="collapse"
        data-target="#archivedItems"
        (click)="archiveOpen=!archiveOpen">
-    <h3 class="panel-title">
       <span
         class="pull-right glyphicon"
         [ngClass]="{'glyphicon-plus-sign' : !archiveOpen, 'glyphicon-minus-sign' : archiveOpen}">
@@ -53,7 +53,7 @@
   </div>
   <div class="panel-body collapse" id="archivedItems">
     <p>Click an item to restore</p>
-    <button *ngFor="let a of (_activeList | async).archive | async" class="btn btn-default" (click)="_items.restore(_activeListKey, a.$key)">
+    <button *ngFor="let a of (activeList | async).archive | async" class="btn btn-default" (click)="items.restore(activeListKey, a.$key)">
       {{ a.name }}
     </button>
   </div>

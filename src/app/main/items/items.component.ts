@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ItemsService } from './items.service';
@@ -11,38 +11,37 @@ import { ListsService } from '../lists/lists.service';
 })
 export class ItemsComponent implements OnInit {
 
-  private _activeList = null;
-  private _activeListKey = null;
+  @Input() activeList = null;
+  @Input() activeListKey = null;
 
-  constructor(private _items: ItemsService,
-              private _lists: ListsService,
-              private _activedRoute: ActivatedRoute ) {
+  archiveOpen = null;
+
+  constructor(public items: ItemsService,
+              public lists: ListsService,
+              public activedRoute: ActivatedRoute ) {
   }
 
   ngOnInit() {
-    this._activedRoute.params.subscribe(x => {
-      this._activeList = this._lists.getList(x["listKey"])
-      this._activeList.subscribe(x => this._activeListKey = x.$key);
-    });
+    console.log('items, activelist', this.activeList);
   }
 
   getMenuObject(listKey, itemKey) {
     return [
     {
-      label: "Archive",
+      label: 'Archive',
       action: {
-        func: this._items.archive,
-        context: this._items,
+        func: this.items.archive,
+        context: this.items,
         args: [listKey, itemKey]
       }
     },
     {
-      label: "Delete",
+      label: 'Delete',
       action: {
-        func: this._items.delete,
-        context: this._items,
+        func: this.items.delete,
+        context: this.items,
         args: [listKey, itemKey]
       }
-    }]
+    }];
   }
 }

@@ -18,10 +18,10 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class ListsComponent implements OnInit, OnDestroy {
 
-  constructor(private _lists : ListsService,
-              private _router: Router,
+  constructor(public lists: ListsService,
+              public router: Router,
               private _route: ActivatedRoute,
-              private _sizeService: ScreenSizeService,
+              public sizeService: ScreenSizeService,
               private _auth: AuthService,
               overlay: Overlay,
               vcRef: ViewContainerRef,
@@ -30,8 +30,8 @@ export class ListsComponent implements OnInit, OnDestroy {
 }
 
   ngOnInit() {
-    this._lists.usersListsChanged$.subscribe(x => console.log("lists component init", x));
-    console.log("'lists component init'");
+    this.lists.usersListsChanged$.subscribe(x => console.log('lists component init', x));
+    console.log('lists component init');
   }
 
   ngOnDestroy() {
@@ -39,9 +39,9 @@ export class ListsComponent implements OnInit, OnDestroy {
   }
 
   getMenuData(list) {
-    //console.log('getting menu data', list);
-    return [{
-      label: "Share",
+    // console.log('getting menu data', list);
+    return [ {
+      label: 'Share',
       action: {
         func: this.showEmailModal,
         context: this,
@@ -49,8 +49,8 @@ export class ListsComponent implements OnInit, OnDestroy {
           list
         ]
       }
-    },{
-      label: "Delete",
+    }, {
+      label: 'Delete',
       action: {
         func: this.confirmDelete,
         context: this,
@@ -58,7 +58,7 @@ export class ListsComponent implements OnInit, OnDestroy {
           list
         ]
       }
-    },]
+    } ];
   }
 
   showEmailModal(listKey) {
@@ -69,13 +69,13 @@ export class ListsComponent implements OnInit, OnDestroy {
       .open()
       .then(resultPromise => {
         resultPromise.result.then( result => {
-          this._lists.share(result, listKey);
-        }, () => console.log("email fail?")
-      )});
+          this.lists.share(result, listKey);
+        }, () => console.log('email fail?')
+      ); });
   }
 
   confirmDelete(listKey) {
-    var f = this._modal.confirm()
+    this._modal.confirm()
       .size('sm')
       .showClose(false)
       .title('Delete list?')
@@ -83,7 +83,7 @@ export class ListsComponent implements OnInit, OnDestroy {
       .open()
       .then(resultPromise => {
         resultPromise.result.then(result => {
-          if (result) this._lists.delete(listKey);
+          if (result) { this.lists.delete(listKey); };
         }, () => true);
       });
   }

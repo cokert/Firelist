@@ -1,10 +1,10 @@
 <ul class="nav navbar-nav">
-  <li *ngIf="!_userData.userId">
-    <a href="#" (click)="_auth.login()">
+  <li *ngIf="!userData.userId">
+    <a href="#" (click)="auth.login()">
       Login
     </a>
   </li>
-  <li *ngIf="_userData.userId" (click)="_auth.logout()">
+  <li *ngIf="userData.userId" (click)="auth.logout()">
     <!-- <img class="profileImage navbar-right" *ngIf="_userData.userId" [src]="_userData.userPicture" /> -->
     <a>
       Logout
