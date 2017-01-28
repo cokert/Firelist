@@ -10,18 +10,13 @@
       <li *ngFor="let l of lists.usersListsChanged$ | async"
           [class.active]="l.$key === lists.activeListKey"
           class='list-group-item'>
-        <div class="pull-right gearMenu">
-          <app-gear-menu *ngIf="l.userIsOwner" [menuData]="getMenuData(l)"></app-gear-menu>
-        </div>
         <div class="row">
-          <div class="listEntry">
-            <div class="col-xs-12"
-                data-target="#lists"
-                [attr.data-toggle]="sizeService.screenIsPhoneSized && (_route.params | async)['listKey'] ? 'collapse' : ''"
-                (click)="router.navigate(['/lists', l.$key])"
-                role="button">
-              {{ l.name === "" ? "[no name]" : l.name }}
-            </div>
+          <div class="col-xs-12"
+              data-target="#lists"
+              [attr.data-toggle]="sizeService.screenIsPhoneSized && (_route.params | async)['listKey'] ? 'collapse' : ''"
+              (click)="router.navigate(['/lists', l.$key])"
+              role="button">
+            {{ l.name === "" ? "[no name]" : l.name }}
           </div>
         </div>
       </li>
