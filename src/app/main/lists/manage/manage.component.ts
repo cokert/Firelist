@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FirebaseListObservable } from 'angularfire2';
 
 import { ListsService, List } from '../lists.service';
+import { ScreenSizeService } from '../../../shared/screen-size.service';
 import { ItemsService } from '../../items/items.service';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
@@ -23,13 +24,14 @@ export class ManageListComponent implements OnInit {
 
   constructor( public items: ItemsService,
                public lists: ListsService,
+               public sizeService: ScreenSizeService,
                private _modal: Modal,
                private _router: Router ) { }
 
   ngOnInit() { }
 
-  renameList(event: Event) {
-    this.lists.rename(this.activeListKey, $(event.target).val());
+  renameList(newName) {
+    this.lists.rename(this.activeListKey, newName);
   }
 
   removeAccess(userKey) {

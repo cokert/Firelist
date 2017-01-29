@@ -1,53 +1,68 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">List operations</h3>
+<div class='panel panel-default'>
+  <div class='panel-heading'>
+    <h3 class='panel-title'>List operations</h3>
   </div>
-  <div class="panel-body">
-    <h4>Rename<input type=text class='form-control' [value]="(activeList | async)?.name" (change)="renameList($event)"></h4>
-    <div class="row">
-      <div class="col-sm-6">
+  <div class='panel-body'>
+    <h4>Rename</h4>
+    <div class='row'>
+      <div class='col-sm-10'>
+        <input #listName type=text class='form-control' [value]='(activeList | async)?.name'>
+      </div>
+      <div class='col-sm-2 pull-right'>
+        <button class='btn btn-success' (click)='renameList(listName.value)'>
+          <span class='glyphicon glyphicon-ok'></span>
+        </button>
+      </div>
+    </div>
+    <hr>
+    <div class='row'>
+      <div class='col-sm-6'>
         <h4>Users with access</h4>
-        <div *ngFor="let u of (activeList | async)?.usersWithAccess | async">
-          <span *ngIf="creatorId != u.$key" (click)="removeAccess(u.$key)">
-            <span class="glyphicon glyphicon-remove-sign"></span>
+        <div *ngFor='let u of (activeList | async)?.usersWithAccess | async'>
+          <span *ngIf='creatorId != u.$key' (click)='removeAccess(u.$key)'>
+            <span class='glyphicon glyphicon-remove-sign'></span>
             {{ u.displayName }}
           </span>
         </div>
+        <hr *ngIf='sizeService.screenIsPhoneSized'>
       </div>
-      <div class="col-sm-6">
+      <div class='col-sm-6'>
         <h4>Share list</h4>
-        Email:<input type="text" class="form-control" #shareEmail>
-        <button class="btn btn-default" (click)="lists.share(shareEmail.value, activeListKey)">Share</button>
+        Email:<input type='text' class='form-control' #shareEmail>
+        <button class='btn btn-default' (click)='lists.share(shareEmail.value, activeListKey)'>Share</button>
       </div>
     </div>
-    <button type="button" class="btn btn-danger" (click)="deleteList()">Delete</button>
+    <hr>
+    <div class='row'>
+      <div class='col-sm-12'>
+        <button type='button' class='btn btn-danger pull-right' (click)='deleteList()'>Delete List</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="panel panel-default" *ngIf="activeList">
-  <div class="panel-heading">
-    <h3 class="panel-title">Items</h3>
+<div class='panel panel-default' *ngIf='activeList'>
+  <div class='panel-heading'>
+    <h3 class='panel-title'>Items</h3>
   </div>
-  <div class="panel-body">
-    <div class="jumbotron" *ngIf="((activeList | async)?.items | async)?.length === 0">
+  <div class='panel-body'>
+    <div class='jumbotron' *ngIf='((activeList | async)?.items | async)?.length === 0'>
       This list is empty.
     </div>
-    <ul class="list-group">
+    <ul class='list-group'>
       <li class='list-group-item'
-          *ngFor="let i of (activeList | async)?.items | async">
-        <div class="listEntasdfry">
-          <div class="row">
-            <div class='col-sm-9'>
-              <input class="form-control" #name [value]="i.name">
-            </div>
-            <div class='col-sm-3'>
-              <button class='btn btn-success' (click)='items.rename(activeListKey, i.$key, name.value)'>
-                <span class='glyphicon glyphicon-ok'></span>
-              </button>
-              <button class='btn btn-danger' (click)="deleteItem(i.$key)">
-                <span class="glyphicon glyphicon-trash"></span>
-              </button>
-            </div>
+          *ngFor='let i of (activeList | async)?.items | async'>
+        <div class='row'>
+          <div class='col-sm-9 col-lg-10'>
+            <input class='form-control' #name [value]='i.name'>
+          </div>
+          <div class='col-sm-3 col-lg-2 text-center pull-right'>
+            <button class='btn btn-success' (click)='items.rename(activeListKey, i.$key, name.value)'>
+              <span class='glyphicon glyphicon-ok'></span>
+            </button>
+            <button class='btn btn-danger' (click)='deleteItem(i.$key)'>
+              <span class='glyphicon glyphicon-trash'></span>
+            </button>
           </div>
         </div>
       </li>
@@ -55,15 +70,15 @@
   </div>
 </div>
 
-<div *ngIf="((activeList | async)?.archive | async)?.length > 0" class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">
+<div *ngIf='((activeList | async)?.archive | async)?.length > 0' class='panel panel-default'>
+  <div class='panel-heading'>
+    <h3 class='panel-title'>
       Archive
     </h3>
   </div>
-  <div class="panel-body collapse" id="archivedItems">
+  <div class='panel-body' id='archivedItems'>
     <p>Click an item to restore</p>
-    <button *ngFor="let a of (activeList | async).archive | async" class="btn btn-default" (click)="items.restore(activeListKey, a.$key)">
+    <button *ngFor='let a of (activeList | async).archive | async' class='btn btn-default' (click)='items.restore(activeListKey, a.$key)'>
       {{ a.name }}
     </button>
   </div>

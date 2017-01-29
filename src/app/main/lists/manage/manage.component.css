@@ -1,0 +1,20 @@
+hr {
+	/*height: 10px;
+	border: 0;
+	box-shadow: 0 10px 10px -10px #8c8b8b inset;*/
+
+	border-top: 1px solid #8c8b8b;
+	border-bottom: 1px solid #fff;
+}
+
+/*hr:after {
+	content: '';
+	display: block;
+	margin-top: 2px;
+	border-top: 1px solid #8c8b8b;
+	border-bottom: 1px solid #fff;
+}*/
+
+.text-center {
+   text-align:center
+}
