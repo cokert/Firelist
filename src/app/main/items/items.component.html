@@ -53,7 +53,7 @@
   </div>
   <div class="panel-body collapse" id="archivedItems">
     <p>Click an item to restore</p>
-    <button *ngFor="let a of (activeList | async).archive | async" class="btn btn-default" (click)="items.restore(activeListKey, a.$key)">
+    <button *ngFor="let a of (activeList | async)?.archive | async" class="btn btn-default" (click)="items.restore(activeListKey, a.$key)">
       {{ a.name }}
     </button>
   </div>

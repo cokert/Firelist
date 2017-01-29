@@ -46,5 +46,6 @@
   <app-list-details
     *ngIf="activeView === 'details'"
     [activeList]="activeList"
-    [activeListKey]="activeListKey"></app-list-details>
+    [activeListKey]="activeListKey"
+    [creatorId]="(activeList | async)?.creatorId"></app-list-details>
 </div>
