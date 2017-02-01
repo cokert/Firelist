@@ -30,9 +30,14 @@
         </div>
       </li>
     </ul>
-    Add to list:
-    <input #newListItem type="text" class="form-control">
-    <button class="btn btn-default" (click)="items.addToList(activeListKey, newListItem.value);newListItem.value='';">save</button>
+    <div class='input-group'>
+      <input #newListItem type="text" class="form-control" placeholder='Add to list...'>
+      <span class='input-group-btn'>
+        <button class="btn btn-success" (click)="items.addToList(activeListKey, newListItem.value);newListItem.value='';">
+          <span class='glyphicon glyphicon-ok'></span>
+        </button>
+      </span>
+    </div>
   </div>
 </div>
 
