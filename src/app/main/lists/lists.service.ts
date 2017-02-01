@@ -118,9 +118,11 @@ export class ListsService {
     list.delay(10).subscribe( (x: List) => {
       console.log('listpath', this._pb.buildListPath(x.$key), 'list', x, 'keys', Object.keys(x));
       console.log("userswithaccess", x['usersWithAccess']);
-      x.usersWithAccess.forEach( u => {
-        console.log('removing access for', u.displayName, 'path', this._pb.buildUserListPath(u.$key, x.$key));
-        this.removeAccess(u.$key, x.$key);
+      x.usersWithAccess.subscribe(y => {
+        y.forEach( u => {
+          console.log('removing access for', u.displayName, 'path', this._pb.buildUserListPath(u.$key, x.$key));
+          this.removeAccess(u.$key, x.$key);
+        })
       });
       this._af.database.object(this._pb.buildListPath(x.$key)).remove();
     });
