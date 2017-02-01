@@ -5,13 +5,15 @@
   <div class='panel-body'>
     <h4>Rename</h4>
     <div class='row'>
-      <div class='col-sm-10'>
-        <input #listName type=text class='form-control' [value]='(activeList | async)?.name'>
-      </div>
-      <div class='col-sm-2 pull-right'>
-        <button class='btn btn-success' (click)='renameList(listName.value)'>
-          <span class='glyphicon glyphicon-ok'></span>
-        </button>
+      <div class='col-xs-12'>
+        <div class='input-group'>
+          <input #listName type=text class='form-control' [value]='(activeList | async)?.name'>
+          <span class="input-group-btn">
+            <button class='btn btn-success' (click)='renameList(listName.value)'>
+              <span class='glyphicon glyphicon-ok'></span>
+            </button>
+          </span>
+        </div>
       </div>
     </div>
     <hr>
@@ -19,7 +21,7 @@
       <div class='col-sm-6'>
         <h4>Users with access</h4>
         <div *ngFor='let u of (activeList | async)?.usersWithAccess | async'>
-          <span *ngIf='creatorId != u.$key' (click)='removeAccess(u.$key)'>
+          <span *ngIf='creatorId != u.$key' role='button' (click)='removeAccess(u.$key)'>
             <span class='glyphicon glyphicon-remove-sign'></span>
             {{ u.displayName }}
           </span>
@@ -28,8 +30,12 @@
       </div>
       <div class='col-sm-6'>
         <h4>Share list</h4>
-        Email:<input type='text' class='form-control' #shareEmail>
-        <button class='btn btn-default' (click)='lists.share(shareEmail.value, activeListKey)'>Share</button>
+        <div class='input-group'>
+          <input type='text' class='form-control' placeholder='Recipients email...' #shareEmail>
+          <span class="input-group-btn">
+            <button class='btn btn-default' (click)='lists.share(shareEmail.value, activeListKey)'>Share</button>
+          </span>
+        </div>
       </div>
     </div>
     <hr>
@@ -53,16 +59,18 @@
       <li class='list-group-item'
           *ngFor='let i of (activeList | async)?.items | async'>
         <div class='row'>
-          <div class='col-sm-9 col-lg-10'>
-            <input class='form-control' #name [value]='i.name'>
-          </div>
-          <div class='col-sm-3 col-lg-2 text-center pull-right'>
-            <button class='btn btn-success' (click)='items.rename(activeListKey, i.$key, name.value)'>
-              <span class='glyphicon glyphicon-ok'></span>
-            </button>
-            <button class='btn btn-danger' (click)='deleteItem(i.$key)'>
-              <span class='glyphicon glyphicon-trash'></span>
-            </button>
+          <div class='col-xs-12'>
+            <div class='input-group'>
+              <input class='form-control' #name [value]='i.name'>
+              <span class="input-group-btn">
+                <button class='btn btn-success' type='button' (click)='items.rename(activeListKey, i.$key, name.value)'>
+                  <span class='glyphicon glyphicon-ok'></span>
+                </button>
+                <button class='btn btn-danger' type='button' (click)='deleteItem(i.$key)'>
+                  <span class='glyphicon glyphicon-trash'></span>
+                </button>
+              </span>
+            </div>
           </div>
         </div>
       </li>

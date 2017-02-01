@@ -23,6 +23,7 @@
   </div>
 </div>
 <div class="col-sm-9">
+  <h2>{{ (activeList | async)?.name }} </h2>
   <ul class="nav nav-tabs">
     <li role="presentation" [class.active]="isActive(['/lists', (activatedRoute.params | async)['listKey']])">
       <a [routerLink]="['/lists', (activatedRoute.params | async)['listKey']]">Items</a>
