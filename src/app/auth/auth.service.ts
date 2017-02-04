@@ -5,6 +5,8 @@ import { AngularFire,
          AuthMethods,
          FirebaseListObservable,
          FirebaseObjectObservable } from 'angularfire2';
+import { Router } from '@angular/router';
+
 import { BehaviorSubject } from 'rxjs/rx';
 
 import { PathBuilderService } from '../shared/pathbuilder.service';
@@ -23,7 +25,8 @@ export class AuthService {
   authChanged$ = this._authChanged.asObservable();
 
   constructor(private _af: AngularFire,
-              private _pb: PathBuilderService) {
+              private _pb: PathBuilderService,
+              private _router: Router) {
     this._af.auth.subscribe(x => {
       if (x) {
         // console.log("logged in", x);
@@ -53,6 +56,7 @@ export class AuthService {
 
   logout() {
     this._af.auth.logout();
+    this._router.navigate(['/']);
   }
 
 }
